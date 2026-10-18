@@ -23,7 +23,7 @@ jobs:
   test:
     needs: discover
     if: needs.discover.outputs.changed == 'true'
-    uses: licensebox/protocol/.github/workflows/sdk.yml@bd07daf685fd41eaa0a6f5220ca24103c706a88e
+    uses: licensebox/protocol/.github/workflows/sdk.yml@beb428a58ad0d4cbae6ec5b1441df948edf9cdd3
     with:
       language: rust
       protocol_ref: ${{ needs.discover.outputs.ref }}
