@@ -19,11 +19,11 @@ jobs:
       - id: discover
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 .github/scripts/discover.py
+        run: python3 -B .github/scripts/discover.py
   test:
     needs: discover
     if: needs.discover.outputs.changed == 'true'
-    uses: licensebox/protocol/.github/workflows/sdk.yml@1bfdfb756c07323a74fa5b5a68c447a1fdb17be0
+    uses: licensebox/protocol/.github/workflows/sdk.yml@bd07daf685fd41eaa0a6f5220ca24103c706a88e
     with:
       language: rust
       protocol_ref: ${{ needs.discover.outputs.ref }}
@@ -43,4 +43,4 @@ jobs:
       - name: Open tested metadata PR
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 .github/scripts/open_sync_pr.py
+        run: python3 -B .github/scripts/open_sync_pr.py
