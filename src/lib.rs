@@ -1,4 +1,4 @@
-//! Safe Rust API over Licensebox C >=0.2.0. Linux is the validated platform.
+//! Safe Rust API over Licensebox C >=0.4.0. Linux is the validated platform.
 //! Keep one client per process; check access before protected work.
 use serde_json::{json, Value};
 use std::{
