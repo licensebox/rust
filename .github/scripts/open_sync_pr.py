@@ -16,6 +16,7 @@ lock=json.loads(Path("protocol-lock.json").read_text())
 ref=lock["ref"]
 if not re.fullmatch(r"[0-9a-f]{40}",ref) or lock.get("repository")!="licensebox/protocol":raise SystemExit("invalid contract pin")
 allowed=["protocol-lock.json"]
+if repo=="licensebox/wasm":allowed.append("host-dependencies.txt")
 if repo=="licensebox/cpp":allowed.append("c-version.cmake")
 if Path("native-version.txt").is_file():allowed.append("native-version.txt")
 changed=run("git","diff","--name-only").splitlines()
@@ -37,8 +38,10 @@ run("git","add","--",*allowed)
 run("git","commit","-m",f"Sync Licensebox contract revision {lock['revision']}")
 run("git","push","origin",f"HEAD:refs/heads/{branch}")
 validation=f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
-body=(f"Update the pinned Licensebox contract to `{ref}` (revision {lock['revision']}).\n\n"
-      "The Linux SDK and shared behavioral conformance checks passed against this contract before this PR was created. "
+checks=("Only the native Java bridge build/lifecycle checks passed. Wolfram runtime conformance remains unvalidated; this is a source preview, not a release. "
+        if lock.get("validation_profile")=="bridge-only-unvalidated" else
+        "The Linux SDK and shared behavioral conformance checks passed against this contract before this PR was created. ")
+body=(f"Update the pinned Licensebox contract to `{ref}` (revision {lock['revision']}).\n\n" + checks +
       f"Validation: {validation}. "
       "Review any required language-specific implementation changes before release. No package publication is performed.\n")
 with tempfile.NamedTemporaryFile(mode="w",suffix=".md") as file:
