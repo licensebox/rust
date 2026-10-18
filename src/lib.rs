@@ -260,6 +260,11 @@ impl Client {
     pub fn require(&mut self, module: &str) -> Result<Value> {
         self.call("require", json!({"module":module}))
     }
+    /// Explicit bounded renewal without activation; returns {lease, online}.
+    /// Application scheduling must independently respect the verified expiry.
+    pub fn heartbeat(&mut self, module: &str) -> Result<Value> {
+        self.call("heartbeat", json!({"module":module}))
+    }
     pub fn status(&mut self) -> Result<Value> {
         self.call("status", json!({}))
     }

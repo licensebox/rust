@@ -84,3 +84,31 @@ and [integration docs](https://licensebox.dev/docs). Administration remains in
 the [Go CLI](https://github.com/licensebox/go) and web console.
 
 MIT. Copyright © 2026 [Vijai Kumar](https://meshing.engineer).
+
+## Optional protected-work checkpoints
+
+```rust
+let checkpoint = client.heartbeat("core")?;
+// An error returns before the next protected unit.
+```
+
+The result is the owned JSON value/string `{"lease":{...},"online":true|false}`
+using this binding's existing JSON and cleanup conventions.
+
+The explicit checkpoint always attempts signed renewal with a three-second
+network bound, even after a cached `Require` succeeded. It never activates,
+opens interactive sign-in, creates/rotates an installation key or transfers a
+seat. Missing saved state returns `not_signed_in`; invalid saved state, a removed
+module or explicit server refusal fails closed. Eligible outages may return a
+verified unexpired saved lease with `online=false`, without extending its signed
+expiry or clearing a saved refusal. A successful renewal replaces cached grants
+before checking the requested nonempty module.
+
+Use the matching native core containing the heartbeat API. Consumers own their
+event loop and safe stop/pause behavior. Read the optional verified `heartbeat`
+policy (`interval_seconds`, `grace_seconds`) to schedule checks; missing/null is
+legacy policy. Independently stop protected work by the last verified `expires`
+even when renewal is slow, and never move that deadline after a failed check.
+Construction, Lease and Require start no background worker. Callback lifetime,
+thread ownership and reentry requirements remain unchanged; the SDK never kills
+the application or discards application results.

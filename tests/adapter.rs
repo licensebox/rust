@@ -34,6 +34,22 @@ fn run(r: &Value) -> licensebox::Result<Value> {
         } else {
             s("module")
         }),
+        "heartbeat" | "heartbeat-repeat" | "heartbeat-after-require" => {
+            let module = if s("module").is_empty() {
+                "core"
+            } else {
+                s("module")
+            };
+            if s("op") == "heartbeat-after-require" {
+                c.require("core")?;
+            }
+            let first = c.heartbeat(module)?;
+            if s("op") == "heartbeat-repeat" {
+                c.heartbeat(module)
+            } else {
+                Ok(first)
+            }
+        }
         "repeat" => {
             c.require("core")?;
             c.require("core")
