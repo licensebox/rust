@@ -1,0 +1,18 @@
+[package]
+name = "licensebox"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.74"
+license = "MIT"
+description = "Machine-bound Licensebox application licensing"
+repository = "https://github.com/licensebox/rust"
+build = "build.rs"
+autotests = false
+[dependencies]
+serde_json = "1"
+[[bin]]
+name = "conformance-adapter"
+path = "tests/adapter.rs"
+required-features = ["conformance"]
+[features]
+conformance = []

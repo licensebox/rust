@@ -1,0 +1,12 @@
+name: Test
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  conformance:
+    uses: licensebox/protocol/.github/workflows/sdk.yml@25d8a1e0aeb818bc8930039670cf500012fe0eaa
+    with:
+      language: rust
