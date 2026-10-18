@@ -6,17 +6,18 @@ from pathlib import Path
 import re
 import subprocess
 import tempfile
+from registry import SDK_REPOSITORIES
 
 def run(*args,**kwargs):return subprocess.check_output(args,text=True,**kwargs).strip()
 repo=os.environ["GITHUB_REPOSITORY"]
-if repo not in {"licensebox/go","licensebox/python","licensebox/javascript","licensebox/c","licensebox/cpp","licensebox/rust","licensebox/java","licensebox/julia","licensebox/dotnet"}:
+if repo not in SDK_REPOSITORIES.values():
     raise SystemExit("repository is not in the SDK allowlist")
 lock=json.loads(Path("protocol-lock.json").read_text())
 ref=lock["ref"]
 if not re.fullmatch(r"[0-9a-f]{40}",ref) or lock.get("repository")!="licensebox/protocol":raise SystemExit("invalid contract pin")
 allowed=["protocol-lock.json"]
 if repo=="licensebox/cpp":allowed.append("c-version.cmake")
-if repo in {"licensebox/rust","licensebox/java","licensebox/julia","licensebox/dotnet"}:allowed.append("native-version.txt")
+if Path("native-version.txt").is_file():allowed.append("native-version.txt")
 changed=run("git","diff","--name-only").splitlines()
 if set(changed)-set(allowed):raise SystemExit("unexpected tracked changes in metadata-only sync")
 untracked=run("git","ls-files","--others","--exclude-standard").splitlines()
