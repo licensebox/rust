@@ -4,7 +4,7 @@ Application licensing backed by the shared C core: native machine identity,
 email sign-in, signed offline leases, silent renewal, module access, approval
 requests and usage reporting. Linux is the initial runtime target.
 
-Requirements: Rust 1.74+ and serde_json; Licensebox C >=0.2.0, OpenSSL 3, libcurl 7.85+ and
+Requirements: Rust 1.74+ and serde_json; Licensebox C >=0.5.0, OpenSSL 3.5+, libcurl 7.85+ and
 json-c. The native dependency is pinned in `native-version.txt` and updated by
 the tested contract-sync workflow. No native code is downloaded at runtime.
 
