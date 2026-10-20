@@ -13,5 +13,5 @@ opens tested pin/dependency PRs; implementation ports still require review.
 Administration stays in the Go CLI. Linux is the initial validated platform.
 Never copy private consuming-application source, documentation, references,
 production keys, tokens or customer records into this public SDK repository.
-Tests use synthetic keys and records only. Preserve maintained Ed25519 crypto,
+Tests use synthetic keys and records only. Preserve maintained hybrid Ed25519 + ML-DSA-65 crypto,
 native machine binding and fail-closed explicit policy refusals.

@@ -7,6 +7,6 @@ permissions:
   contents: read
 jobs:
   conformance:
-    uses: licensebox/protocol/.github/workflows/sdk.yml@beb428a58ad0d4cbae6ec5b1441df948edf9cdd3
+    uses: licensebox/protocol/.github/workflows/sdk.yml@3c3f6569d803b845a4c7cefc2680e91677b6e72b
     with:
       language: rust

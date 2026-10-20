@@ -1,9 +1,9 @@
 {
   "repository": "licensebox/protocol",
-  "ref": "beb428a58ad0d4cbae6ec5b1441df948edf9cdd3",
-  "protocol": 2,
-  "revision": 12,
-  "reference_go": "v0.7.0",
+  "ref": "3c3f6569d803b845a4c7cefc2680e91677b6e72b",
+  "protocol": 3,
+  "revision": 14,
+  "reference_go": "v0.8.1",
   "validation_profile": "linux-native",
-  "vectors_sha256": "5f48d780ef7bb1f511ea4f935facad71748ff2a8f3cfc07fb512b82d1cfb302c"
+  "vectors_sha256": "44ecdfc8d3e64be9d3e6d71ce7f88a10adab51ab7f2f34cea3ae40b8f7a55b02"
 }
