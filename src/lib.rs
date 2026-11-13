@@ -53,6 +53,9 @@ pub struct Config {
     pub version: String,
     pub server: Option<String>,
     pub directory: Option<String>,
+    /// A service account's one-time enrolment token; `None` reads
+    /// `LICENSEBOX_ENROL_TOKEN`. With one, the first lease enrols the machine.
+    pub enrol_token: Option<String>,
     pub callbacks: Callbacks,
 }
 impl Config {
@@ -63,6 +66,7 @@ impl Config {
             version: String::new(),
             server: None,
             directory: None,
+            enrol_token: None,
             callbacks: Callbacks::default(),
         }
     }
@@ -214,6 +218,9 @@ impl Client {
         if let Some(v) = config.directory {
             options["directory"] = json!(v)
         }
+        if let Some(v) = config.enrol_token {
+            options["enrol_token"] = json!(v)
+        }
         let state = Box::new(State {
             hooks: config.callbacks,
             failure: None,
@@ -285,6 +292,18 @@ impl Client {
     }
     pub fn request_access(&mut self, modules: &[&str], note: &str) -> Result<Value> {
         self.call("request", json!({"modules":modules,"note":note}))
+    }
+    /// Enrols this machine as a service account with a one-time token.
+    pub fn enrol(&mut self, token: &str) -> Result<Value> {
+        self.call("enrol", json!({"token":token}))
+    }
+    /// Checks a floating copy of the module out; `require` does so by itself.
+    pub fn checkout(&mut self, module: &str) -> Result<Value> {
+        self.call("checkout", json!({"module":module}))
+    }
+    /// Returns floating copies of the modules, or every copy with none named.
+    pub fn checkin(&mut self, modules: &[&str]) -> Result<()> {
+        self.call("checkin", json!({"modules":modules})).map(|_| ())
     }
     pub fn access_link(&mut self) -> Result<String> {
         self.call("access-link", json!({}))?

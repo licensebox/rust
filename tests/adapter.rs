@@ -19,6 +19,7 @@ fn run(r: &Value) -> licensebox::Result<Value> {
     cfg.version = "conformance".into();
     cfg.server = Some(s("server").into());
     cfg.directory = Some(s("directory").into());
+    cfg.enrol_token = r["enrol_token"].as_str().map(String::from);
     let now = r["now"].as_f64().unwrap();
     cfg.callbacks.clock = Some(Box::new(move || now));
     let host = s("binding").to_string();
@@ -58,6 +59,9 @@ fn run(r: &Value) -> licensebox::Result<Value> {
         "modules" => c.modules(),
         "requests" => c.requests(),
         "access-link" => c.access_link().map(|s| json!(s)),
+        "enrol" => c.enrol(s("token")),
+        "checkout" => c.checkout(s("module")),
+        "checkin" => c.checkin(&[s("module")]).map(|_| Value::Null),
         "request" => c.request_access(&["export"], "café – test"),
         "record" => {
             c.record("export", true, 0.125)?;

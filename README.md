@@ -112,3 +112,18 @@ even when renewal is slow, and never move that deadline after a failed check.
 Construction, Lease and Require start no background worker. Callback lifetime,
 thread ownership and reentry requirements remain unchanged; the SDK never kills
 the application or discards application results.
+
+## Seats per module, floating copies and service accounts
+
+Calls: `enrol(token)`, `checkout(module)`, `checkin(&modules)`, and `Config::enrol_token`.
+
+A module can have seats of its own: on a machine without its seat the lease
+names it in `elsewhere`, requiring it fails with `module_denied`, and an
+explicit sign-in moves the seat here. A customer can hold a pool of floating
+copies of a module, named in the lease's `floating`: requiring such a module
+checks a copy out (`no_free_copy` when every copy is in use), heartbeats keep
+it, and checking in returns it. A crashed application's copy is freed when
+the heartbeat grace passes. A server or build runner licensed as a service
+account sets the one-time token an admin issued as `LICENSEBOX_ENROL_TOKEN`
+or the `enrol_token` option: its first lease enrols the machine without a
+browser (`invalid_token` when the token is used or expired).
